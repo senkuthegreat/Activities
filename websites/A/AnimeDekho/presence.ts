@@ -20,9 +20,10 @@ let _urlCheckInterval: number | null = null
 
 enum ActivityAssets {
   Logo = 'https://i.pinimg.com/736x/d2/22/6f/d2226f61410df21c007f4bb4b4528745.jpg',
+  Home = 'https://i.pinimg.com/736x/04/37/52/043752362be09cdf0c75644aab4e618a.jpg',
+  Search = 'https://i.pinimg.com/736x/bf/2c/58/bf2c586e1622f07955910adc21c04d10.jpg',
 }
 const SmallImageAssets = {
-  Search: Assets.Search as string,
   Play: Assets.Play as string,
   Pause: Assets.Pause as string,
 }
@@ -82,7 +83,7 @@ presence.on('UpdateData', async () => {
   // Homepage
   if (pathname === '/home/') {
     presenceData.details = 'Browsing Homepage'
-    presenceData.smallImageKey = SmallImageAssets.Search
+    presenceData.smallImageKey = ActivityAssets.Home
   }
 
   // Search page
@@ -90,19 +91,19 @@ presence.on('UpdateData', async () => {
     const searchQuery = document.querySelector('h1.section-title span')?.textContent
     presenceData.details = 'Searching'
     presenceData.state = searchQuery ? `for "${searchQuery}"` : 'for anime'
-    presenceData.smallImageKey = SmallImageAssets.Search
+    presenceData.smallImageKey = ActivityAssets.Search
   }
 
   // Series category page
   else if (pathname === '/series/') {
     presenceData.details = 'Browsing Series Category'
-    presenceData.smallImageKey = SmallImageAssets.Search
+    presenceData.smallImageKey = ActivityAssets.Search
   }
 
   // Movie category page
   else if (pathname === '/movie/') {
     presenceData.details = 'Browsing Movie Category'
-    presenceData.smallImageKey = SmallImageAssets.Search
+    presenceData.smallImageKey = ActivityAssets.Search
   }
 
   // Anime page
@@ -150,8 +151,7 @@ presence.on('UpdateData', async () => {
         presenceData.endTimestamp = endTimestamp
         presenceData.smallImageKey = SmallImageAssets.Play
         presenceData.smallImageText = 'Watching'
-      }
-      else {
+      } else {
         // Video is paused
         presenceData.smallImageKey = SmallImageAssets.Pause
         presenceData.smallImageText = 'Paused'
@@ -197,8 +197,7 @@ presence.on('UpdateData', async () => {
         presenceData.endTimestamp = endTimestamp
         presenceData.smallImageKey = SmallImageAssets.Play
         presenceData.smallImageText = 'Watching'
-      }
-      else {
+      } else {
         // Video is paused
         presenceData.smallImageKey = SmallImageAssets.Pause
         presenceData.smallImageText = 'Paused'
@@ -209,7 +208,7 @@ presence.on('UpdateData', async () => {
 
     if (buttons) {
       // Simplified button creation with safer path handling
-      presenceData.buttons = [{ label: 'Watch Episode', url: href },]
+      presenceData.buttons = [{ label: 'Watch Episode', url: href }]
 
       // Try to extract anime ID for "View Series" button
       try {
@@ -226,18 +225,6 @@ presence.on('UpdateData', async () => {
         // If anything fails, we already have the "Watch Episode" button
       }
     }
-  }
-
-  // Recent episodes page
-  else if (pathname.includes('/recent')) {
-    presenceData.details = 'Browsing Recent Episodes'
-    presenceData.smallImageKey = SmallImageAssets.Search
-  }
-
-  // Schedule page
-  else if (pathname.includes('/schedule')) {
-    presenceData.details = 'Viewing Schedule'
-    presenceData.smallImageKey = SmallImageAssets.Search
   }
 
   // Add this check right here, before the final setActivity calls
