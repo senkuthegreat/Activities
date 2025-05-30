@@ -20,9 +20,9 @@ let _urlCheckInterval: number | null = null
 
 enum ActivityAssets {
   Logo = 'https://i.pinimg.com/736x/d2/22/6f/d2226f61410df21c007f4bb4b4528745.jpg',
-  Search = 'search',
-  Play = 'play',
-  Pause = 'pause',
+  Search = Assets.Search,
+  Play = Assets.Play,
+  Pause = Assets.Pause,
 }
 
 // Handle iframe data with timestamp to detect freshness
@@ -148,8 +148,7 @@ presence.on('UpdateData', async () => {
         presenceData.endTimestamp = endTimestamp
         presenceData.smallImageKey = ActivityAssets.Play
         presenceData.smallImageText = 'Watching'
-      }
-      else {
+      } else {
         // Video is paused
         presenceData.smallImageKey = ActivityAssets.Pause
         presenceData.smallImageText = 'Paused'
@@ -195,8 +194,7 @@ presence.on('UpdateData', async () => {
         presenceData.endTimestamp = endTimestamp
         presenceData.smallImageKey = ActivityAssets.Play
         presenceData.smallImageText = 'Watching'
-      }
-      else {
+      } else {
         // Video is paused
         presenceData.smallImageKey = ActivityAssets.Pause
         presenceData.smallImageText = 'Paused'
