@@ -19,7 +19,7 @@ let lastUrl = document.location.href
 let urlCheckInterval: number | null = null
 
 enum ActivityAssets {
-  Logo = 'https://i.pinimg.com/736x/cf/08/4e/cf084e53ab1a153662c5cb96c193a284.jpg',
+  Logo = 'https://i.pinimg.com/736x/d2/22/6f/d2226f61410df21c007f4bb4b4528745.jpg',
   Search = Assets.Search,
   Play = Assets.Play,
   Pause = Assets.Pause
