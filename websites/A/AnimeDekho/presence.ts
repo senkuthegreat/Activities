@@ -1,79 +1,244 @@
+import { Assets, ActivityType, getTimestamps } from 'premid'
+
 const presence = new Presence({
-  clientId: '1371050079439425576',
+  clientId: '1377295092578123926'
 })
 
-const ActivityAssets = {
-  DefaultLogo: 'https://cdn.rcd.gg/PreMiD/websites/A/AnimeDekho/assets/logo.png',
+const browsingTimestamp = Math.floor(Date.now() / 1000)
+
+// Store video data
+let data: {
+  currTime: number
+  duration: number
+  paused: boolean
+  timestamp: number
+} = null as any
+
+// Track the last URL to detect page changes
+let lastUrl = document.location.href
+let urlCheckInterval: number | null = null
+
+enum ActivityAssets {
+  Logo = 'https://i.pinimg.com/736x/cf/08/4e/cf084e53ab1a153662c5cb96c193a284.jpg',
+  Search = Assets.Search,
+  Play = Assets.Play,
+  Pause = Assets.Pause
 }
 
-function formatTitle(text: string): string {
-  return text.replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
-}
-
-interface EpisodeInfo {
-  title: string
-  season: string
-  episode: string
-}
-
-function getEpisodeInfo(url: string): EpisodeInfo | null {
-  const match = url.match(/\/epi\/(.+)-(\d+)x(\d+)\//)
-  if (match) {
-    return {
-      title: formatTitle(match[1] || ''),
-      season: `Season ${match[2]}`,
-      episode: `Episode ${match[3]}`,
-    }
-  }
-  return null
-}
-
-let lastEpisodeKey = ''
-let fixedTimestamp: number | null = null
-
-presence.on('UpdateData', () => {
-  const { pathname } = window.location
-  const presenceData: any = {}
-
-  if (pathname.startsWith('/epi/')) {
-    const info = getEpisodeInfo(`${pathname}/`)
-
-    if (info) {
-      const key = pathname
-      if (!fixedTimestamp || lastEpisodeKey !== key) {
-        fixedTimestamp = Math.floor(Date.now() / 1000)
-        lastEpisodeKey = key
+// Handle iframe data with timestamp to detect freshness
+presence.on('iFrameData', (iframeData: { currTime: number, duration: number, paused: boolean }) => {
+  if (iframeData.currTime && iframeData.duration) {
+    // Update data with timestamp (reuse object if possible)
+    if (data) {
+      data.currTime = iframeData.currTime
+      data.duration = iframeData.duration
+      data.paused = iframeData.paused
+      data.timestamp = Date.now()
+    } else {
+      data = {
+        currTime: iframeData.currTime,
+        duration: iframeData.duration,
+        paused: iframeData.paused,
+        timestamp: Date.now()
       }
-
-      presenceData.details = info.title
-      presenceData.state = `${info.season} · ${info.episode}`
-      presenceData.startTimestamp = fixedTimestamp
-      presenceData.largeImageKey = ActivityAssets.DefaultLogo
-
-      presence.setActivity(presenceData)
-      return
     }
   }
-  else if (pathname.startsWith('/series/')) {
-    const match = pathname.match(/\/series\/([^/]+)\//)
-    if (match) {
-      const rawName = match[1]
-      const title = formatTitle(rawName || '')
-      presenceData.details = title
-    }
-    else {
-      presenceData.details = 'Viewing Anime Info'
-    }
+})
+
+// Check for URL changes every second
+urlCheckInterval = setInterval(() => {
+  const currentUrl = document.location.href
+  if (currentUrl !== lastUrl) {
+    data = null as any
+    lastUrl = currentUrl
   }
+}, 1000)
+
+presence.on('UpdateData', async () => {
+  const presenceData: PresenceData = {
+    startTimestamp: browsingTimestamp,
+    type: ActivityType.Watching
+  }
+  
+  const { pathname, search, href } = document.location
+  const buttons = await presence.getSetting<boolean>('buttons')
+  const timestamps = await presence.getSetting<boolean>('timestamps')
+  
+  // Check if data is stale (more than 3 seconds old)
+  const now = Date.now()
+  if (data && now - data.timestamp > 3000) {
+    data = null as any
+  }
+  
+  // Set default logo only for homepage and non-anime pages
+  if (pathname === '/') {
+    presenceData.largeImageKey = ActivityAssets.Logo
+  }
+
+  // Homepage
+  if (pathname === '/home/') {
+    presenceData.details = 'Browsing Homepage'
+    presenceData.smallImageKey = ActivityAssets.Search
+  }
+
+  // Search page
+  else if (search.startsWith('?s=')) {
+    const searchQuery = document.querySelector('h1.section-title span')?.textContent
+    presenceData.details = 'Searching'
+    presenceData.state = searchQuery ? `for "${searchQuery}"` : 'for anime'
+    presenceData.smallImageKey = ActivityAssets.Search
+  }
+
+  // Category page
   else if (pathname.startsWith('/category/')) {
-    const category = formatTitle(pathname.split('/')[2] || 'Browsing')
+    const searchQuery = document.querySelector('h1.section-title span')?.textContent
     presenceData.details = 'Browsing Category'
-    presenceData.state = category
-  }
-  else {
-    presenceData.details = 'Browsing AnimeDekho'
+    presenceData.state = searchQuery ? `for "${searchQuery}"` : 'for anime'
+    presenceData.smallImageKey = ActivityAssets.Search
   }
 
-  presenceData.largeImageKey = ActivityAssets.DefaultLogo
-  presence.setActivity(presenceData)
+  // Series category page
+  else if (pathname === '/series/') {
+    presenceData.details = 'Browsing Series Category'
+    presenceData.smallImageKey = ActivityAssets.Search
+  }
+
+  // Movie category page
+  else if (pathname === '/movie/') {
+    presenceData.details = 'Browsing Movies Category'
+    presenceData.smallImageKey = ActivityAssets.Search
+  }
+
+  // Series page
+  else if (pathname.startsWith('/series/')) {
+    const title = document.querySelector('h1')?.textContent
+    const thumbnail = document.querySelector('.post-thumbnail img')?.getAttribute('src')
+    
+    presenceData.details = 'Viewing Series'
+    presenceData.state = title || 'Unknown Series'
+    if (thumbnail) {
+      presenceData.largeImageKey = String(thumbnail)
+      presenceData.largeImageText = title || 'Unknown Series'
+    }
+    if (buttons) {
+      presenceData.buttons = [
+        {
+          label: 'View Details',
+          url: href
+        }
+      ]
+    }
+  }
+
+  // Movie page
+  else if (pathname.startsWith('/movie/') && pathname !== '/movie/') {
+    const title = document.querySelector('h1')?.textContent
+    const thumbnail = document.querySelector('.post-thumbnail img')?.getAttribute('src')
+    
+    presenceData.state = 'Movie'
+    presenceData.details = title || 'Unknown Movie'
+    if (thumbnail) {
+      presenceData.largeImageKey = String(thumbnail)
+      presenceData.largeImageText = title || 'Unknown Movie'
+    }
+    
+    // Handle video data for timestamps (for direct movie watching)
+    if (data && timestamps) {
+      if (!data.paused && data.currTime > 0 && data.duration > 0) {
+        // Video is playing - calculate timestamps only when needed
+        const [startTimestamp, endTimestamp] = getTimestamps(
+          Math.floor(data.currTime),
+          Math.floor(data.duration)
+        )
+        presenceData.startTimestamp = startTimestamp
+        presenceData.endTimestamp = endTimestamp
+        presenceData.smallImageKey = Assets.Play
+        presenceData.smallImageText = 'Watching'
+      } 
+      else {
+        // Video is paused
+        presenceData.smallImageKey = Assets.Pause 
+        presenceData.smallImageText = 'Paused'
+        delete presenceData.startTimestamp
+        delete presenceData.endTimestamp
+      }
+    }
+    
+    if (buttons) {
+      presenceData.buttons = [
+        {
+          label: 'Watch Movie',
+          url: href
+        }
+      ]
+    }
+  }
+
+  // Watch page 
+  else if (pathname.includes('/epi/')) {
+    const rawtitle = document.querySelector('.entry-title')?.textContent || ''
+    const title = rawtitle.replace(/Season\s\d+\sEpisode\s\d+|\d+x\d+$/i, '').trim()
+    const episode = document.querySelector('.season-episode')?.textContent || ''
+    const thumbnail = document.querySelector('.post-thumbnail img')?.getAttribute('src')
+
+    presenceData.details = title || 'Unknown Anime'
+    presenceData.state = episode || 'Unknown Episode'
+
+    if (thumbnail) {
+      presenceData.largeImageKey = String(thumbnail)
+      presenceData.largeImageText = title || 'Unknown Anime'
+    }
+
+    // Handle video data for timestamps
+    if (data && timestamps) {
+      if (!data.paused && data.currTime > 0 && data.duration > 0) {
+        // Video is playing - calculate timestamps only when needed
+        const [startTimestamp, endTimestamp] = getTimestamps(
+          Math.floor(data.currTime),
+          Math.floor(data.duration)
+        )
+        presenceData.startTimestamp = startTimestamp
+        presenceData.endTimestamp = endTimestamp
+        presenceData.smallImageKey = Assets.Play
+        presenceData.smallImageText = 'Watching'
+      } 
+      else {
+        // Video is paused
+        presenceData.smallImageKey = Assets.Pause 
+        presenceData.smallImageText = 'Paused'
+        delete presenceData.startTimestamp
+        delete presenceData.endTimestamp
+      }
+    }
+
+    if (buttons) {
+      // Simplified button creation with safer path handling
+      presenceData.buttons = [{ label: 'Watch Episode', url: href }]
+      
+      // Try to extract anime ID for "View Series" button
+      try {
+        const match = pathname.match(/\/epi\/([^\/]+)/)
+        if (match && match[1]) {
+          const animeId = match[1].replace(/-\d+x\d+$/, '')
+          presenceData.buttons.push({ 
+            label: 'View Series', 
+            url: `${window.location.origin}/series/${animeId}` 
+          })
+        }
+      } catch (e) {
+        // If anything fails, we already have the "Watch Episode" button
+      }
+    }
+  }
+
+  // Add this check right here, before the final setActivity calls
+  if (!buttons && presenceData.buttons) {
+    delete presenceData.buttons
+  }
+
+  // These should be the last lines of your UpdateData event handler
+  if (presenceData.details) 
+    presence.setActivity(presenceData)
+  else 
+    presence.setActivity()
 })
