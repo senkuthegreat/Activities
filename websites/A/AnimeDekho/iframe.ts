@@ -175,9 +175,9 @@ function sendJWPlayerData(player: JWPlayer): void {
     const paused = player.getState() !== 'playing'
 
     // Only send if values have changed significantly
-    if (duration && currentTime &&
-        (Math.abs(currentTime - lastSentTime) > 0.5 ||
-         Math.abs(duration - lastSentDuration) > 0.5)) {
+    if (duration && currentTime
+      && (Math.abs(currentTime - lastSentTime) > 0.5
+        || Math.abs(duration - lastSentDuration) > 0.5)) {
       iframe.send({
         currTime: currentTime,
         duration,
@@ -226,8 +226,8 @@ function onTimeUpdate(event: Event): void {
 function sendVideoData(video: HTMLVideoElement): void {
   if (video && !Number.isNaN(video.duration) && video.duration > 0) {
     // Only send if values have changed significantly
-    if (Math.abs(video.currentTime - lastSentTime) > 0.5 ||
-        Math.abs(video.duration - lastSentDuration) > 0.5) {
+    if (Math.abs(video.currentTime - lastSentTime) > 0.5
+      || Math.abs(video.duration - lastSentDuration) > 0.5) {
       iframe.send({
         currTime: video.currentTime,
         duration: video.duration,
