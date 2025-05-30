@@ -22,7 +22,7 @@
     "streaming"
   ],
   "iframe": true,
-  "iFrameRegExp": ".*",
+  "iFrameRegExp": "([a-z0-9-]+[.])*vidcloud[.]upns[.]ink[/]|([a-z0-9-]+[.])*raretoonsindia[.]co[/]|([a-z0-9-]+[.])*storage[.]googleapis[.]com|([a-z0-9-]+[.])*rubystm[.]com|([a-z0-9-]+[.])*pixeldrain[.]net|([a-z0-9-]+[.])*zoro[.]rpmplay[.]xyz|([a-z0-9-]+[.])*vidmoly[.]net|([a-z0-9-]+[.])*emturbovid[.]com|([a-z0-9-]+[.])*cdn[.]plyr[.]io|([a-z0-9-]+[.])*video-downloads[.]googleusercontent[.]com|([a-z0-9-]+[.])*abysscdn[.]com|([a-z0-9-]+[.])*hydrax[.]net",
   "settings": [
     {
       "id": "buttons",
