@@ -88,6 +88,7 @@ presence.on('UpdateData', async () => {
 
   // Search page
   else if (search.startsWith('?s=')) {
+    // amazonq-ignore-next-line
     const searchQuery = document.querySelector('h1.section-title span')?.textContent
     presenceData.details = 'Searching'
     presenceData.state = searchQuery ? `for "${searchQuery}"` : 'for anime'
@@ -145,13 +146,14 @@ presence.on('UpdateData', async () => {
         // Video is playing - calculate timestamps only when needed
         const [startTimestamp, endTimestamp] = getTimestamps(
           Math.floor(data.currTime),
-          Math.floor(data.duration)
+          Math.floor(data.duration),
         )
         presenceData.startTimestamp = startTimestamp
         presenceData.endTimestamp = endTimestamp
         presenceData.smallImageKey = SmallImageAssets.Play
         presenceData.smallImageText = 'Watching'
-      } else {
+      }
+      else {
         // Video is paused
         presenceData.smallImageKey = SmallImageAssets.Pause
         presenceData.smallImageText = 'Paused'
@@ -191,13 +193,14 @@ presence.on('UpdateData', async () => {
         // Video is playing - calculate timestamps only when needed
         const [startTimestamp, endTimestamp] = getTimestamps(
           Math.floor(data.currTime),
-          Math.floor(data.duration)
+          Math.floor(data.duration),
         )
         presenceData.startTimestamp = startTimestamp
         presenceData.endTimestamp = endTimestamp
         presenceData.smallImageKey = SmallImageAssets.Play
         presenceData.smallImageText = 'Watching'
-      } else {
+      }
+      else {
         // Video is paused
         presenceData.smallImageKey = SmallImageAssets.Pause
         presenceData.smallImageText = 'Paused'
@@ -235,6 +238,7 @@ presence.on('UpdateData', async () => {
   // These should be the last lines of your UpdateData event handler
   if (presenceData.details)
     presence.setActivity(presenceData)
+
   else
     presence.setActivity()
 })
