@@ -20,8 +20,8 @@ let _urlCheckInterval: number | null = null
 
 enum ActivityAssets {
   Logo = 'https://i.pinimg.com/736x/d2/22/6f/d2226f61410df21c007f4bb4b4528745.jpg',
-  Home = 'https://i.pinimg.com/736x/04/37/52/043752362be09cdf0c75644aab4e618a.jpg',
-  Search = 'https://i.pinimg.com/736x/bf/2c/58/bf2c586e1622f07955910adc21c04d10.jpg',
+  Home = 'https://i.pinimg.com/736x/8a/5c/86/8a5c869a837a70e13a13edcacc35c96b.jpg',
+  Searching = 'https://i.pinimg.com/736x/b2/61/2a/b2612a911abcb68b5c2e0d9acb4679df.jpg',
 }
 const SmallImageAssets = {
   Play: Assets.Play as string,
@@ -91,19 +91,19 @@ presence.on('UpdateData', async () => {
     const searchQuery = document.querySelector('h1.section-title span')?.textContent
     presenceData.details = 'Searching'
     presenceData.state = searchQuery ? `for "${searchQuery}"` : 'for anime'
-    presenceData.smallImageKey = ActivityAssets.Search
+    presenceData.smallImageKey = ActivityAssets.Searching
   }
 
   // Series category page
   else if (pathname === '/series/') {
     presenceData.details = 'Browsing Series Category'
-    presenceData.smallImageKey = ActivityAssets.Search
+    presenceData.smallImageKey = ActivityAssets.Searching
   }
 
   // Movie category page
   else if (pathname === '/movie/') {
     presenceData.details = 'Browsing Movie Category'
-    presenceData.smallImageKey = ActivityAssets.Search
+    presenceData.smallImageKey = ActivityAssets.Searching
   }
 
   // Anime page
