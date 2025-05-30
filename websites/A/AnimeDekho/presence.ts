@@ -1,4 +1,4 @@
-import { ActivityType, getTimestamps } from 'premid'
+import { ActivityType, Assets, getTimestamps } from 'premid'
 
 const presence = new Presence({
   clientId: '1377295092578123926',
@@ -20,9 +20,11 @@ let _urlCheckInterval: number | null = null
 
 enum ActivityAssets {
   Logo = 'https://i.pinimg.com/736x/d2/22/6f/d2226f61410df21c007f4bb4b4528745.jpg',
-  Search = Assets.Search,
-  Play = Assets.Play,
-  Pause = Assets.Pause,
+}
+const SmallImageAssets = {
+  Search: Assets.Search as string,
+  Play: Assets.Play as string,
+  Pause: Assets.Pause as string,
 }
 
 // Handle iframe data with timestamp to detect freshness
@@ -80,7 +82,7 @@ presence.on('UpdateData', async () => {
   // Homepage
   if (pathname === '/home/') {
     presenceData.details = 'Browsing Homepage'
-    presenceData.smallImageKey = ActivityAssets.Search
+    presenceData.smallImageKey = SmallImageAssets.Search
   }
 
   // Search page
@@ -88,19 +90,19 @@ presence.on('UpdateData', async () => {
     const searchQuery = document.querySelector('h1.section-title span')?.textContent
     presenceData.details = 'Searching'
     presenceData.state = searchQuery ? `for "${searchQuery}"` : 'for anime'
-    presenceData.smallImageKey = ActivityAssets.Search
+    presenceData.smallImageKey = SmallImageAssets.Search
   }
 
   // Series category page
   else if (pathname === '/series/') {
     presenceData.details = 'Browsing Series Category'
-    presenceData.smallImageKey = ActivityAssets.Search
+    presenceData.smallImageKey = SmallImageAssets.Search
   }
 
   // Movie category page
   else if (pathname === '/movie/') {
     presenceData.details = 'Browsing Movie Category'
-    presenceData.smallImageKey = ActivityAssets.Search
+    presenceData.smallImageKey = SmallImageAssets.Search
   }
 
   // Anime page
@@ -146,11 +148,12 @@ presence.on('UpdateData', async () => {
         )
         presenceData.startTimestamp = startTimestamp
         presenceData.endTimestamp = endTimestamp
-        presenceData.smallImageKey = ActivityAssets.Play
+        presenceData.smallImageKey = SmallImageAssets.Play
         presenceData.smallImageText = 'Watching'
-      } else {
+      }
+      else {
         // Video is paused
-        presenceData.smallImageKey = ActivityAssets.Pause
+        presenceData.smallImageKey = SmallImageAssets.Pause
         presenceData.smallImageText = 'Paused'
         delete presenceData.startTimestamp
         delete presenceData.endTimestamp
@@ -192,11 +195,12 @@ presence.on('UpdateData', async () => {
         )
         presenceData.startTimestamp = startTimestamp
         presenceData.endTimestamp = endTimestamp
-        presenceData.smallImageKey = ActivityAssets.Play
+        presenceData.smallImageKey = SmallImageAssets.Play
         presenceData.smallImageText = 'Watching'
-      } else {
+      }
+      else {
         // Video is paused
-        presenceData.smallImageKey = ActivityAssets.Pause
+        presenceData.smallImageKey = SmallImageAssets.Pause
         presenceData.smallImageText = 'Paused'
         delete presenceData.startTimestamp
         delete presenceData.endTimestamp
@@ -205,7 +209,7 @@ presence.on('UpdateData', async () => {
 
     if (buttons) {
       // Simplified button creation with safer path handling
-      presenceData.buttons = [{ label: 'Watch Episode', url: href }]
+      presenceData.buttons = [{ label: 'Watch Episode', url: href },]
 
       // Try to extract anime ID for "View Series" button
       try {
@@ -227,13 +231,13 @@ presence.on('UpdateData', async () => {
   // Recent episodes page
   else if (pathname.includes('/recent')) {
     presenceData.details = 'Browsing Recent Episodes'
-    presenceData.smallImageKey = ActivityAssets.Search
+    presenceData.smallImageKey = SmallImageAssets.Search
   }
 
   // Schedule page
   else if (pathname.includes('/schedule')) {
     presenceData.details = 'Viewing Schedule'
-    presenceData.smallImageKey = ActivityAssets.Search
+    presenceData.smallImageKey = SmallImageAssets.Search
   }
 
   // Add this check right here, before the final setActivity calls
