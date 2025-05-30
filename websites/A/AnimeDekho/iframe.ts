@@ -32,10 +32,10 @@ function findAndTrackVideo(): boolean {
   // Special handling for specific players
   if (isHydrax) {
     return findHydraxVideo()
-  } 
+  }
   else if (isVidCloud) {
     return findVidCloudVideo()
-  } 
+  }
   else if (isPixelDrain) {
     return findPixelDrainVideo()
   }
@@ -49,12 +49,12 @@ function findAndTrackVideo(): boolean {
 
   // Try multiple selector approaches (one at a time to reduce DOM queries)
   const videoSelectors = [
-    '.video-js video',           // VideoJS
-    '.plyr video',               // Plyr player
-    '*[id*="player"] video',   // Video in player div
-    '.jw-video',                 // JW Player
-    '.vjs-tech',                 // Video.js
-    'video.op-player__media',    // Oplayer
+    '.video-js video', // VideoJS
+    '.plyr video', // Plyr player
+    '*[id*="player"] video', // Video in player div
+    '.jw-video', // JW Player
+    '.vjs-tech', // Video.js
+    'video.op-player__media', // Oplayer
   ]
 
   // Try each selector
@@ -175,9 +175,9 @@ function sendJWPlayerData(player: JWPlayer): void {
     const paused = player.getState() !== 'playing'
 
     // Only send if values have changed significantly
-    if (duration && currentTime 
-      && (Math.abs(currentTime - lastSentTime) > 0.5 
-        || Math.abs(duration - lastSentDuration) > 0.5)) {
+    if (duration && currentTime &&
+        (Math.abs(currentTime - lastSentTime) > 0.5 ||
+         Math.abs(duration - lastSentDuration) > 0.5)) {
       iframe.send({
         currTime: currentTime,
         duration,
@@ -187,7 +187,8 @@ function sendJWPlayerData(player: JWPlayer): void {
       lastSentTime = currentTime
       lastSentDuration = duration
     }
-  } catch (_) {
+  }
+  catch {
     // Ignore errors
   }
 }
@@ -225,8 +226,8 @@ function onTimeUpdate(event: Event): void {
 function sendVideoData(video: HTMLVideoElement): void {
   if (video && !Number.isNaN(video.duration) && video.duration > 0) {
     // Only send if values have changed significantly
-    if (Math.abs(video.currentTime - lastSentTime) > 0.5 
-      || Math.abs(video.duration - lastSentDuration) > 0.5) {
+    if (Math.abs(video.currentTime - lastSentTime) > 0.5 ||
+        Math.abs(video.duration - lastSentDuration) > 0.5) {
       iframe.send({
         currTime: video.currentTime,
         duration: video.duration,
