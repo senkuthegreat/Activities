@@ -112,11 +112,11 @@ presence.on('UpdateData', async () => {
     const title = document.querySelector('h1')?.textContent
     const thumbnail = document.querySelector('.post-thumbnail img')?.getAttribute('src')
 
-    presenceData.details = 'Viewing Anime'
-    presenceData.state = title || 'Unknown Anime'
+    presenceData.details = 'Viewing Series'
+    presenceData.state = title || 'Unknown Series'
     if (thumbnail) {
       presenceData.largeImageKey = String(thumbnail)
-      presenceData.largeImageText = title || 'Unknown Anime'
+      presenceData.largeImageText = title || 'Unknown Series'
     }
     if (buttons) {
       presenceData.buttons = [
@@ -179,12 +179,12 @@ presence.on('UpdateData', async () => {
     const episode = document.querySelector('.season-episode')?.textContent || ''
     const thumbnail = document.querySelector('.post-thumbnail img')?.getAttribute('src')
 
-    presenceData.details = title || 'Unknown Anime'
+    presenceData.details = title || 'Unknown Series'
     presenceData.state = episode || 'Unknown Episode'
 
     if (thumbnail) {
       presenceData.largeImageKey = String(thumbnail)
-      presenceData.largeImageText = title || 'Unknown Anime'
+      presenceData.largeImageText = title || 'Unknown Series'
     }
 
     // Handle video data for timestamps
