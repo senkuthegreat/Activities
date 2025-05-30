@@ -1,4 +1,4 @@
-import { ActivityType, Assets, getTimestamps } from 'premid'
+import { ActivityType, getTimestamps } from 'premid'
 
 const presence = new Presence({
   clientId: '1377295092578123926',
@@ -73,7 +73,7 @@ presence.on('UpdateData', async () => {
 
   // Set default logo only for homepage and non-anime pages
   if (pathname === '/' || pathname === '/home/' || search.startsWith('?s=')
-      || pathname.includes('/recent') || pathname.includes('/schedule')) {
+    || pathname.includes('/recent') || pathname.includes('/schedule')) {
     presenceData.largeImageKey = ActivityAssets.Logo
   }
 
