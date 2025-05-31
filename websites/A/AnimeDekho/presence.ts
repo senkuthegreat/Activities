@@ -65,8 +65,11 @@ presence.on('UpdateData', async () => {
   }
 
   const { pathname, search, href } = document.location
-  const buttons = await presence.getSetting<boolean>('buttons')
-  const timestamps = await presence.getSetting<boolean>('timestamps')
+
+  const [buttons, timestamps] = await Promise.all([
+    presence.getSetting<boolean>('buttons'),
+    presence.getSetting<boolean>('timestamps'),
+  ])
 
   // Check if data is stale (more than 3 seconds old)
   const now = Date.now()
@@ -227,7 +230,7 @@ presence.on('UpdateData', async () => {
           const animeId = match[1].replace(/-\d+x\d+$/, '')
           presenceData.buttons.push({
             label: 'View Series',
-            url: `${window.location.origin}/series/${animeId}`,
+            url: `${document.location.origin}/series/${animeId}`,
           })
         }
       }
