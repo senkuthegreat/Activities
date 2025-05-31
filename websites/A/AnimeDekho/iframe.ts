@@ -1,34 +1,55 @@
 const iframe = new iFrame()
 
-// Track if we've found a video
 let videoFound = false
 let jwPlayerInterval: number | null = null
 let lastUpdateTime = 0
 
-// Define JWPlayer interface
 interface JWPlayer {
   getDuration: () => number
   getPosition: () => number
   getState: () => string
 }
 
-// Extend Window interface to include jwplayer
 declare global {
   interface Window {
     jwplayer?: () => JWPlayer
   }
 }
 
-// Function to find and track video
 function findAndTrackVideo() {
-  // Try standard video element first
-  const video = document.querySelector<HTMLVideoElement>('video')
-  if (video && !Number.isNaN(video.duration) && video.duration > 0) {
-    setupVideoTracking(video)
-    return true
+  if (window.location.hostname.includes('abysscdn.com')) {
+    const playerDiv = document.getElementById('player')
+    if (playerDiv) {
+      const video = playerDiv.querySelector('video')
+      if (video && !Number.isNaN(video.duration) && video.duration > 0) {
+        setupVideoTracking(video)
+        return true
+      }
+    }
   }
 
-  // Try to find player objects in window
+  const videoSelectors = [
+    'video',
+    '.video-js video',
+    '.plyr video',
+    '*[id*="player"] video',
+    '.jw-video',
+    '.vjs-tech',
+    'video.op-player__media',
+    'iframe video',
+    '.Video video',
+    '#player video',
+    '#hydrax-player video',
+  ]
+
+  for (const selector of videoSelectors) {
+    const video = document.querySelector<HTMLVideoElement>(selector)
+    if (video && !Number.isNaN(video.duration) && video.duration > 0) {
+      setupVideoTracking(video)
+      return true
+    }
+  }
+
   if (window.jwplayer) {
     const player = window.jwplayer()
     if (player && typeof player.getDuration === 'function' && typeof player.getPosition === 'function') {
@@ -37,44 +58,74 @@ function findAndTrackVideo() {
     }
   }
 
+  const elements = document.querySelectorAll('*')
+  for (const elem of elements) {
+    if (elem.shadowRoot) {
+      const video = elem.shadowRoot.querySelector('video')
+      if (video && !Number.isNaN(video.duration) && video.duration > 0) {
+        setupVideoTracking(video)
+        return true
+      }
+    }
+  }
+
+  const scripts = document.querySelectorAll('script')
+  for (const script of scripts) {
+    if (script.src && (
+      script.src.includes('iamcdn.net')
+      || script.src.includes('abysscdn.com')
+      || script.src.includes('core.bundle')
+    )) {
+      setTimeout(() => {
+        const video = document.querySelector('video')
+        if (video && !Number.isNaN(video.duration) && video.duration > 0) {
+          setupVideoTracking(video)
+        }
+      }, 1000)
+    }
+  }
+
   return false
 }
 
-// Setup tracking for JW Player
 function setupJWPlayerTracking(player: JWPlayer) {
-  // Clear any existing interval
   if (jwPlayerInterval !== null) {
     clearInterval(jwPlayerInterval)
   }
 
-  // Send initial data
   sendJWPlayerData(player)
 
-  // Set up interval to send data
   jwPlayerInterval = setInterval(() => {
     sendJWPlayerData(player)
-  }, 3000) // Reduced to 3 seconds
+  }, 3000)
 
-  // Mark that we found a video
   videoFound = true
 
   return true
 }
 
-// Send data from JW Player
 function sendJWPlayerData(player: JWPlayer) {
   try {
     const duration = player.getDuration()
     const currentTime = player.getPosition()
     const paused = player.getState() !== 'playing'
 
-    // Send to Discord via iframe
     iframe.send({
       currTime: currentTime,
       duration,
       paused,
       assets: {
         large_image: paused ? 'pause' : 'play',
+      },
+      state: {
+        currentTime,
+        duration,
+        paused,
+      },
+      playback: {
+        currTime: currentTime,
+        duration,
+        paused,
       },
     })
   }
@@ -83,39 +134,26 @@ function sendJWPlayerData(player: JWPlayer) {
   }
 }
 
-// Setup tracking for a video element
 function setupVideoTracking(video: HTMLVideoElement) {
-  // Remove any existing event listeners to avoid duplicates
   video.removeEventListener('timeupdate', onTimeUpdate)
-
-  // Add new event listener
   video.addEventListener('timeupdate', onTimeUpdate)
-
-  // Send initial data
   sendVideoData(video)
-
-  // Mark that we found a video
   videoFound = true
-
   return true
 }
 
-// Timeupdate event handler
 function onTimeUpdate(event: Event) {
   const video = event.target as HTMLVideoElement
   sendVideoData(video)
 }
 
-// Function to send video data
 function sendVideoData(video: HTMLVideoElement) {
   if (video && !Number.isNaN(video.duration) && video.duration > 0) {
-    // Throttle updates to reduce CPU usage
     const now = Date.now()
     if (now - lastUpdateTime < 3000) {
-      return // Skip updates that are too frequent
+      return
     }
 
-    // Send to Discord via iframe
     iframe.send({
       currTime: video.currentTime,
       duration: video.duration,
@@ -123,20 +161,27 @@ function sendVideoData(video: HTMLVideoElement) {
       assets: {
         large_image: video.paused ? 'pause' : 'play',
       },
+      state: {
+        currentTime: video.currentTime,
+        duration: video.duration,
+        paused: video.paused,
+      },
+      playback: {
+        currTime: video.currentTime,
+        duration: video.duration,
+        paused: video.paused,
+      },
     })
 
     lastUpdateTime = now
   }
 }
 
-// Check for video on every UpdateData event, but not too frequently
 let lastCheckTime = 0
 iframe.on('UpdateData', () => {
   const now = Date.now()
-  // Only check every 5 seconds
   if (now - lastCheckTime > 5000) {
     if (!findAndTrackVideo() && !videoFound) {
-      // If no video found, send default paused state
       iframe.send({
         currTime: 0,
         duration: 0,
@@ -150,11 +195,9 @@ iframe.on('UpdateData', () => {
   }
 })
 
-// Set up a periodic check for videos
 const periodicCheck = setInterval(() => {
   if (!videoFound) {
     if (!findAndTrackVideo()) {
-      // If still no video found, send default paused state
       iframe.send({
         currTime: 0,
         duration: 0,
@@ -162,28 +205,78 @@ const periodicCheck = setInterval(() => {
         assets: {
           large_image: 'pause',
         },
+        domain: window.location.hostname,
       })
     }
     else {
-      // If video found, clear this interval as it's no longer needed
       clearInterval(periodicCheck)
     }
   }
   else {
-    // If video already found, clear this interval as it's no longer needed
     clearInterval(periodicCheck)
   }
-}, 5000)
+}, 3000)
 
-// Initial check
-if (!findAndTrackVideo()) {
-  // If no video found initially, send default paused state
-  iframe.send({
-    currTime: 0,
-    duration: 0,
-    paused: true,
-    assets: {
-      large_image: 'pause',
-    },
-  })
+if (window.location.hostname.includes('animedekho.co')
+  || window.location.hostname.includes('abysscdn.com')
+  || window.location.hostname.includes('short.icu')) {
+  findAndTrackVideo()
+
+  setTimeout(() => {
+    if (!videoFound) {
+      findAndTrackVideo()
+    }
+  }, 2000)
+
+  setTimeout(() => {
+    if (!videoFound) {
+      findAndTrackVideo()
+    }
+  }, 5000)
+
+  setTimeout(() => {
+    if (!videoFound && !findAndTrackVideo()) {
+      iframe.send({
+        currTime: 0,
+        duration: 0,
+        paused: true,
+        assets: {
+          large_image: 'pause',
+        },
+        state: {
+          currentTime: 0,
+          duration: 0,
+          paused: true,
+        },
+        playback: {
+          currTime: 0,
+          duration: 0,
+          paused: true,
+        },
+        domain: window.location.hostname,
+      })
+    }
+  }, 8000)
+}
+else {
+  if (!findAndTrackVideo()) {
+    iframe.send({
+      currTime: 0,
+      duration: 0,
+      paused: true,
+      assets: {
+        large_image: 'pause',
+      },
+      state: {
+        currentTime: 0,
+        duration: 0,
+        paused: true,
+      },
+      playback: {
+        currTime: 0,
+        duration: 0,
+        paused: true,
+      },
+    })
+  }
 }
