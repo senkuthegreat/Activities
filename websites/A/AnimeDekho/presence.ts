@@ -75,8 +75,7 @@ presence.on('UpdateData', async () => {
   }
 
   // Set default logo only for homepage and non-anime pages
-  if (pathname === '/' || pathname === '/home/' || search.startsWith('?s=')
-    || pathname.includes('/recent') || pathname.includes('/schedule')) {
+  if (pathname === '/') {
     presenceData.largeImageKey = ActivityAssets.Logo
   }
 
@@ -91,7 +90,15 @@ presence.on('UpdateData', async () => {
     // amazonq-ignore-next-line
     const searchQuery = document.querySelector('h1.section-title span')?.textContent
     presenceData.details = 'Searching'
-    presenceData.state = searchQuery ? `for "${searchQuery}"` : 'for anime'
+    presenceData.state = searchQuery ? `for "${searchQuery}"` : 'for ...'
+    presenceData.smallImageKey = ActivityAssets.Searching
+  }
+
+  // Category page
+  else if (pathname.startsWith('/category/')) {
+    const searchQuery = document.querySelector('h1.section-title span')?.textContent
+    presenceData.details = 'Browsing Category'
+    presenceData.state = searchQuery ? `for "${searchQuery}"` : 'for ...'
     presenceData.smallImageKey = ActivityAssets.Searching
   }
 
