@@ -12,9 +12,9 @@
   },
   "url": "recodive.com",
   "regExp": "^https?[:][/][/]([a-z0-9-]+[.])*recodive[.]com[/]",
-  "version": "1.0.0",
-  "logo": "https://i.imgur.com/Xqd21yP.png",
-  "thumbnail": "https://i.imgur.com/l8L4vfY.png",
+  "version": "1.0.1",
+  "logo": "https://cdn.rcd.gg/PreMiD/websites/R/Recodive/assets/logo.png",
+  "thumbnail": "https://cdn.rcd.gg/PreMiD/websites/R/Recodive/assets/thumbnail.png",
   "color": "#3BA4A5",
   "category": "other",
   "tags": [
