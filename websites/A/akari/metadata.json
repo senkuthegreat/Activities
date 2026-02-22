@@ -11,9 +11,9 @@
   },
   "url": "a.rafasu.com",
   "regExp": "^https?[:][/][/]a[.]rafasu[.]com[/]",
-  "version": "1.0.0",
-  "logo": "https://a.rafasu.com/akari-mid.png",
-  "thumbnail": "https://a.rafasu.com/premid-thumbnail.png",
+  "version": "1.0.1",
+  "logo": "https://cdn.rcd.gg/PreMiD/websites/A/akari/assets/logo.png",
+  "thumbnail": "https://cdn.rcd.gg/PreMiD/websites/A/akari/assets/thumbnail.png",
   "color": "#d4a0ff",
   "category": "anime",
   "tags": [

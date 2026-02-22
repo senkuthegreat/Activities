@@ -6,7 +6,7 @@ const presence = new Presence({
 const browsingTimestamp = Math.floor(Date.now() / 1000)
 
 enum ActivityAssets {
-  Logo = 'https://a.rafasu.com/akari-mid.png',
+  Logo = 'https://cdn.rcd.gg/PreMiD/websites/A/akari/assets/logo.png',
 }
 
 presence.on('UpdateData', async () => {
