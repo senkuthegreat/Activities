@@ -17,9 +17,9 @@
   },
   "url": "cloud.boosteroid.com",
   "regExp": "^https?[:][/][/]cloud[.]boosteroid[.]com[/]",
-  "version": "1.0.0",
-  "logo": "https://i.imgur.com/5cztMTp.png",
-  "thumbnail": "https://i.imgur.com/ngz9JvG.png",
+  "version": "1.0.1",
+  "logo": "https://cdn.rcd.gg/PreMiD/websites/B/Boosteroid/assets/logo.png",
+  "thumbnail": "https://cdn.rcd.gg/PreMiD/websites/B/Boosteroid/assets/thumbnail.png",
   "color": "#8c3dff",
   "category": "games",
   "tags": [

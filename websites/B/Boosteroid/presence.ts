@@ -2,22 +2,22 @@ const presence = new Presence({
   clientId: '1358341885772562553',
 })
 
-const BOOSTEROID_LOGO = 'https://i.imgur.com/fWwYdQR.png'
+const BOOSTEROID_LOGO = 'https://cdn.rcd.gg/PreMiD/websites/B/Boosteroid/assets/0.png'
 
 const PLATFORM_ICONS: Record<string, string> = {
-  'steam': 'https://i.imgur.com/Awri5FL.png',
-  'xbox': 'https://i.imgur.com/vNefzIj.png',
-  'rockstar-games': 'https://i.imgur.com/eJkcT1L.png',
-  'epic': 'https://i.imgur.com/ihqSLsY.png',
-  'epic-games-store': 'https://i.imgur.com/ihqSLsY.png',
-  'wargamingnet': 'https://i.imgur.com/B7Xp3AW.png',
-  'battlenet': 'https://i.imgur.com/Cx0Mo8j.png',
-  'battle-net': 'https://i.imgur.com/Cx0Mo8j.png',
-  'uplay': 'https://i.imgur.com/sweQUqZ.png',
-  'ubisoft-connect': 'https://i.imgur.com/sweQUqZ.png',
-  'origin': 'https://i.imgur.com/HXOOS65.png',
-  'ea-app': 'https://i.imgur.com/HXOOS65.png',
-  'fanatical': 'https://i.imgur.com/Awri5FL.png',
+  'steam': 'https://cdn.rcd.gg/PreMiD/websites/B/Boosteroid/assets/1.png',
+  'xbox': 'https://cdn.rcd.gg/PreMiD/websites/B/Boosteroid/assets/2.png',
+  'rockstar-games': 'https://cdn.rcd.gg/PreMiD/websites/B/Boosteroid/assets/3.png',
+  'epic': 'https://cdn.rcd.gg/PreMiD/websites/B/Boosteroid/assets/4.png',
+  'epic-games-store': 'https://cdn.rcd.gg/PreMiD/websites/B/Boosteroid/assets/4.png',
+  'wargamingnet': 'https://cdn.rcd.gg/PreMiD/websites/B/Boosteroid/assets/5.png',
+  'battlenet': 'https://cdn.rcd.gg/PreMiD/websites/B/Boosteroid/assets/6.png',
+  'battle-net': 'https://cdn.rcd.gg/PreMiD/websites/B/Boosteroid/assets/6.png',
+  'uplay': 'https://cdn.rcd.gg/PreMiD/websites/B/Boosteroid/assets/7.png',
+  'ubisoft-connect': 'https://cdn.rcd.gg/PreMiD/websites/B/Boosteroid/assets/7.png',
+  'origin': 'https://cdn.rcd.gg/PreMiD/websites/B/Boosteroid/assets/8.png',
+  'ea-app': 'https://cdn.rcd.gg/PreMiD/websites/B/Boosteroid/assets/8.png',
+  'fanatical': 'https://cdn.rcd.gg/PreMiD/websites/B/Boosteroid/assets/1.png',
   'default': BOOSTEROID_LOGO,
 }
 
