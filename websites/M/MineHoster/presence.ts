@@ -5,24 +5,24 @@ const presence = new Presence({
 const browsingTimestamp = Math.floor(Date.now() / 1000)
 
 enum Images {
-  home = 'https://i.imgur.com/d0u9KBC.png',
-  magicPen = 'https://i.imgur.com/u91zmaE.png',
-  eye = 'https://i.imgur.com/YgvuHjf.png',
-  message = 'https://i.imgur.com/GmdAyQk.png',
-  book = 'https://i.imgur.com/S0yvaDs.png',
-  greenDot = 'https://i.imgur.com/B4Bx8nn.png',
-  yellowDot = 'https://i.imgur.com/OIF8Hi0.png',
-  redDot = 'https://i.imgur.com/K1nTKQY.png',
-  pen = 'https://i.imgur.com/WCNCAfF.png',
-  search = 'https://i.imgur.com/XBf1cGW.png',
-  settingsBig = 'https://i.imgur.com/JKIwVXB.png',
-  clock = 'https://i.imgur.com/5PiTO2N.png',
-  group = 'https://i.imgur.com/5yGqlXI.png',
-  cloud = 'https://i.imgur.com/T99PYwE.png',
-  network = 'https://i.imgur.com/he4qHAL.png',
-  settings = 'https://i.imgur.com/GASIlZP.png',
-  arrowUpDown = 'https://i.imgur.com/JAbwLgh.png',
-  user = 'https://i.imgur.com/ZSiPGqT.png',
+  home = 'https://cdn.rcd.gg/PreMiD/websites/M/MineHoster/assets/0.png',
+  magicPen = 'https://cdn.rcd.gg/PreMiD/websites/M/MineHoster/assets/1.png',
+  eye = 'https://cdn.rcd.gg/PreMiD/websites/M/MineHoster/assets/2.png',
+  message = 'https://cdn.rcd.gg/PreMiD/websites/M/MineHoster/assets/3.png',
+  book = 'https://cdn.rcd.gg/PreMiD/websites/M/MineHoster/assets/4.png',
+  greenDot = 'https://cdn.rcd.gg/PreMiD/websites/M/MineHoster/assets/5.png',
+  yellowDot = 'https://cdn.rcd.gg/PreMiD/websites/M/MineHoster/assets/6.png',
+  redDot = 'https://cdn.rcd.gg/PreMiD/websites/M/MineHoster/assets/7.png',
+  pen = 'https://cdn.rcd.gg/PreMiD/websites/M/MineHoster/assets/8.png',
+  search = 'https://cdn.rcd.gg/PreMiD/websites/M/MineHoster/assets/9.png',
+  settingsBig = 'https://cdn.rcd.gg/PreMiD/websites/M/MineHoster/assets/10.png',
+  clock = 'https://cdn.rcd.gg/PreMiD/websites/M/MineHoster/assets/11.png',
+  group = 'https://cdn.rcd.gg/PreMiD/websites/M/MineHoster/assets/12.png',
+  cloud = 'https://cdn.rcd.gg/PreMiD/websites/M/MineHoster/assets/13.png',
+  network = 'https://cdn.rcd.gg/PreMiD/websites/M/MineHoster/assets/14.png',
+  settings = 'https://cdn.rcd.gg/PreMiD/websites/M/MineHoster/assets/15.png',
+  arrowUpDown = 'https://cdn.rcd.gg/PreMiD/websites/M/MineHoster/assets/16.png',
+  user = 'https://cdn.rcd.gg/PreMiD/websites/M/MineHoster/assets/17.png',
 }
 
 function getPathFromHash(): string {
@@ -152,7 +152,7 @@ async function getStrings() {
 
 presence.on('UpdateData', async () => {
   const presenceData: PresenceData = {
-    largeImageKey: 'https://i.imgur.com/eKix94M.png',
+    largeImageKey: 'https://cdn.rcd.gg/PreMiD/websites/M/MineHoster/assets/logo.png',
     startTimestamp: browsingTimestamp,
   }
 
