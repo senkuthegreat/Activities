@@ -7,8 +7,8 @@ const browsingTimestamp = Math.floor(Date.now() / 1000)
 // URL IMMAGINI
 const LOGO_URL = 'https://cdn.rcd.gg/PreMiD/websites/A/AnimeTvOnline/assets/0.png'
 // Nuove icone 512x512 fornite dall'utente
-const PLAY_ICON = 'https://i.imgur.com/s9ID1n7.png'
-const PAUSE_ICON = 'https://i.imgur.com/MumA9Gv.png'
+const PLAY_ICON = 'https://cdn.rcd.gg/PreMiD/websites/A/AnimeTvOnline/assets/1.png'
+const PAUSE_ICON = 'https://cdn.rcd.gg/PreMiD/websites/A/AnimeTvOnline/assets/2.png'
 
 presence.on('UpdateData', async () => {
   const path = document.location.pathname
