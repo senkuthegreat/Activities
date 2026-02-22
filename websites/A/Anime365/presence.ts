@@ -8,7 +8,7 @@ const presence = new Presence({
 const browsingTimestamp = Math.floor(Date.now() / 1000)
 
 enum ActivityAssets {
-  Logo = 'https://ltdfoto.ru/images/2026/02/17/anime-365.png',
+  Logo = 'https://cdn.rcd.gg/PreMiD/websites/A/Anime365/assets/logo.png',
 }
 
 // Video data received from iframe (embedded player)
