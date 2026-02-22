@@ -2,9 +2,9 @@ import { ActivityType } from 'premid'
 
 // Static Asset Configuration
 enum ActivityAssets {
-  Logo = 'https://i.imgur.com/XHf3H8Y.png',
-  Play = 'https://i.imgur.com/ryNutI5.png',
-  Pause = 'https://i.imgur.com/TlMwR5i.png',
+  Logo = 'https://cdn.rcd.gg/PreMiD/websites/M/Monochrome/assets/logo.png',
+  Play = 'https://cdn.rcd.gg/PreMiD/websites/M/Monochrome/assets/0.png',
+  Pause = 'https://cdn.rcd.gg/PreMiD/websites/M/Monochrome/assets/1.png',
 }
 
 const presence = new Presence({
