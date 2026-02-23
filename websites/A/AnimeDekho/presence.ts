@@ -12,7 +12,7 @@ let data: {
   duration: number
   paused: boolean
   timestamp: number
-} = null as any
+} | null = null
 
 // Track the last URL to detect page changes
 let lastUrl = document.location.href
@@ -53,7 +53,7 @@ presence.on('iFrameData', (iframeData: { currTime: number, duration: number, pau
 _urlCheckInterval = setInterval(() => {
   const currentUrl = document.location.href
   if (currentUrl !== lastUrl) {
-    data = null as any
+    data = null
     lastUrl = currentUrl
   }
 }, 1000)
@@ -74,7 +74,7 @@ presence.on('UpdateData', async () => {
   // Check if data is stale (more than 3 seconds old)
   const now = Date.now()
   if (data && now - data.timestamp > 3000) {
-    data = null as any
+    data = null
   }
 
   // Set default logo only for homepage and non-anime pages
@@ -90,7 +90,6 @@ presence.on('UpdateData', async () => {
 
   // Search page
   else if (search.startsWith('?s=')) {
-    // amazonq-ignore-next-line
     const searchQuery = document.querySelector('h1.section-title span')?.textContent
     presenceData.details = 'Searching'
     presenceData.state = searchQuery ? `for "${searchQuery}"` : 'for ...'
