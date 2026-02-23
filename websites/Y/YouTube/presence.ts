@@ -1,7 +1,7 @@
 import type {
   Resolver,
 } from './util/index.js'
-import { ActivityType, Assets, getTimestampsFromMedia } from 'premid'
+import { ActivityType, Assets, getTimestampsFromMedia, StatusDisplayType } from 'premid'
 import {
   checkStringLanguage,
   getMobileChapter,
@@ -67,6 +67,7 @@ presence.on('UpdateData', async () => {
     hideHome,
     hidePaused,
     showListening,
+    displayType,
   ] = [
     getSetting<string>('lang', 'en'),
     getSetting<boolean>('privacy', true),
@@ -81,6 +82,7 @@ presence.on('UpdateData', async () => {
     getSetting<boolean>('hideHome', false),
     getSetting<boolean>('hidePaused', true),
     getSetting<number>('showListening', 0),
+    getSetting<number>('displayType', 2),
   ]
   const { pathname, hostname, search, href } = document.location
   const isMobile = hostname === 'm.youtube.com'
@@ -150,16 +152,16 @@ presence.on('UpdateData', async () => {
 
     let chapter = document.querySelector(selectors.chapterTitle)?.textContent
     if (isMobile && !chapter) {
-      chapter = getMobileChapter(video.currentTime)
+      chapter = getMobileChapter(video.currentTime) ?? undefined
     }
 
     if (logo === LogoMode.Channel) {
       pfp = resolver === youtubeMiniplayerResolver
         ? ''
         : document
-          .querySelector<HTMLImageElement>(selectors.videoChannelImage)
-          ?.src
-          .replace(/=s\d+/, '=s512')
+            .querySelector<HTMLImageElement>(selectors.videoChannelImage)
+            ?.src
+            .replace(/=s\d+/, '=s512')
     }
     const unlistedPathElement = document.querySelector<SVGPathElement>(
       'g#privacy_unlisted > path',
@@ -288,6 +290,21 @@ presence.on('UpdateData', async () => {
       presenceData.smallImageText = video.paused ? strings.pause : strings.play
     }
 
+    switch (displayType) {
+      case 0: {
+        presenceData.statusDisplayType = StatusDisplayType.Name
+        break
+      }
+      case 1: {
+        presenceData.statusDisplayType = StatusDisplayType.Details
+        break
+      }
+      case 2: {
+        presenceData.statusDisplayType = StatusDisplayType.State
+        break
+      }
+    }
+
     if (!presenceData.details)
       presence.setActivity()
     else presence.setActivity(presenceData)
@@ -352,7 +369,7 @@ presence.on('UpdateData', async () => {
         if (
           documentTitle.includes(
             document.querySelector(selectors.userName)?.textContent?.trim() ?? '',
-          )
+          ) && document.querySelector(selectors.userName)?.textContent
         ) {
           user = document.querySelector(selectors.userName)?.textContent
         }
