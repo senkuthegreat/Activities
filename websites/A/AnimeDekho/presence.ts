@@ -106,19 +106,19 @@ presence.on('UpdateData', async () => {
   }
 
   // Series category page
-  else if (pathname === '/series/') {
+  else if (pathname === '/serie/') {
     presenceData.details = 'Browsing Series Category'
     presenceData.smallImageKey = ActivityAssets.Searching
   }
 
   // Movie category page
-  else if (pathname === '/movie/') {
+  else if (pathname === '/movies/') {
     presenceData.details = 'Browsing Movie Category'
     presenceData.smallImageKey = ActivityAssets.Searching
   }
 
   // Anime page
-  else if (pathname.startsWith('/series/')) {
+  else if (pathname.startsWith('/serie/')) {
     const title = document.querySelector('h1')?.textContent
     const thumbnail = document.querySelector('.post-thumbnail img')?.getAttribute('src')
 
@@ -139,7 +139,7 @@ presence.on('UpdateData', async () => {
   }
 
   // Movie page
-  else if (pathname.startsWith('/movie/') && pathname !== '/movie/') {
+  else if (pathname.startsWith('/movies/') && pathname !== '/movies/') {
     const title = document.querySelector('h1')?.textContent
     const thumbnail = document.querySelector('.post-thumbnail img')?.getAttribute('src')
 
@@ -230,7 +230,7 @@ presence.on('UpdateData', async () => {
           const animeId = match[1].replace(/-\d+x\d+$/, '')
           presenceData.buttons.push({
             label: 'View Series',
-            url: `${document.location.origin}/series/${animeId}`,
+            url: `${document.location.origin}/serie/${animeId}`,
           })
         }
       }
