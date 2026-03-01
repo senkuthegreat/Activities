@@ -7,7 +7,7 @@ const presence = new Presence({
 const browsingTimestamp = Math.floor(Date.now() / 1000)
 
 const ActivityAssets = {
-  Logo: 'https://i.imgur.com/nzdDKtJ.png',
+  Logo: 'https://cdn.rcd.gg/PreMiD/websites/L/LINE%20MUSIC/assets/logo.png',
 }
 const strings = presence.getStrings({
   play: 'general.playing',

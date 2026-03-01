@@ -12,9 +12,9 @@
   },
   "url": "music.line.me",
   "regExp": "^https?[:][/][/]music[.]line[.]me[/]",
-  "version": "1.0.0",
-  "logo": "https://i.imgur.com/nzdDKtJ.png",
-  "thumbnail": "https://i.imgur.com/qZBsZx2.png",
+  "version": "1.0.1",
+  "logo": "https://cdn.rcd.gg/PreMiD/websites/L/LINE%20MUSIC/assets/logo.png",
+  "thumbnail": "https://cdn.rcd.gg/PreMiD/websites/L/LINE%20MUSIC/assets/thumbnail.png",
   "color": "#00C300",
   "category": "music",
   "tags": [
